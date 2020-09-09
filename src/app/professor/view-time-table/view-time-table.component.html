@@ -31,8 +31,10 @@
           <td class="col1" *ngFor="let time of timings;let j = index">
             <span
               class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13"
-              (click)="addLecture(i,j)">+</span>
-            <div class="margin-10px-top font-size14">{{time}}</div>
+              (click)="addLecture(i,j)" *ngIf="timeTable[i][j] == 0">+</span>
+
+            <div class="margin-10px-top font-size14" *ngIf="timeTable[i][j] != 0">{{timeTable[i][j]}}</div>
+            <div class="margin-10px-top font-size14" *ngIf="timeTable[i][j] != 0">Time: {{time}}</div>
           </td>
         </tr>
 
@@ -55,8 +57,8 @@
               <label for="exampleInputEmail1">Professor Name</label>
               <input type="email" class="form-control" id="professorName" [(ngModel)]="professorName"
                 placeholder="Enter Name" name="professorName">
-              <small *ngIf="validateProfessor" id="emailHelp" class="form-text text-muted danger">Kindly Add Professor
-                Name.</small>
+              <small *ngIf="validateProfessor" id="emailHelp" class="form-text text-muted danger">Please enter unique
+                professor name</small>
             </div>
           </form>
         </div>
@@ -65,6 +67,45 @@
         <a href="javascript:;" class="btn btn-success btn-md" (click)="addProfessorName()" type="submit"
           role="button">Add</a>
         <a href="javascript:;" class="btn btn-light btn-md" (click)="addProfessor.hide()" role="button">Cancel</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" bsModal #addLectureModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog"
+  aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add Lecture</h2>
+      </div>
+
+      <div class="modal-body">
+        <div class="container">
+          <form>
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">Select Professor</label>
+              <select class="form-control" id="exampleFormControlSelect1" [(ngModel)]="selectedProfessorName"
+                name="selectedProfessorName">
+                <option value="select">Select</option>
+                <option *ngFor="let prof of professor" [value]="prof">{{prof}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Add LectureName:</label>
+              <input type="email" class="form-control" id="lectureName" [(ngModel)]="lectureName"
+                placeholder="Enter Name" name="lectureName">
+              <small *ngIf="validateProfessor" id="emailHelp" class="form-text text-muted danger">Kindly Add Professor
+                Name.</small>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="javascript:;" class="btn btn-success btn-md" (click)="saveLecture()" type="submit"
+          role="button">Add</a>
+        <a href="javascript:;" class="btn btn-light btn-md" (click)="addLectureModal.hide()" role="button">Cancel</a>
       </div>
     </div>
   </div>

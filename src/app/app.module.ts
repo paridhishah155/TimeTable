@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { HeaderComponent } from './common/service/component/header/header.component';
 import { ProfessorModule } from './professor/professor.module';
+import { GlobalHelperService } from './common/service/global-helper.service';
 
 
 @NgModule({
@@ -20,7 +21,7 @@ import { ProfessorModule } from './professor/professor.module';
     AppRoutingModule,
     ProfessorModule
   ],
-  providers: [],
+  providers: [GlobalHelperService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
