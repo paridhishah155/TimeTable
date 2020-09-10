@@ -7,6 +7,8 @@ import { LoginComponent } from './login/login.component';
 import { HeaderComponent } from './common/service/component/header/header.component';
 import { ProfessorModule } from './professor/professor.module';
 import { GlobalHelperService } from './common/service/global-helper.service';
+import { StudentModule } from './student/student.module';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 
 @NgModule({
@@ -14,14 +16,14 @@ import { GlobalHelperService } from './common/service/global-helper.service';
     AppComponent,
     LoginComponent,
     HeaderComponent,
-
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ProfessorModule
+    StudentModule,
+    HttpClientModule
   ],
-  providers: [GlobalHelperService],
+  providers: [GlobalHelperService, HttpClient],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,15 +1,13 @@
 <div class="container">
   <div class="row mt-5">
     <div class="col-12">
-      <a href="javascript:;" class="btn btn-primary btn-md" (click)="addProfessor.show()" role="button">Add
+      <a class="btn btn-success btn-md mr-2 mb-5" routerLink="/" role="button">Home</a>
+      <a *ngIf="role != 'student'" href="javascript:;" class="btn btn-primary btn-md mb-5" (click)="addProfessor.show()"
+        role="button">Add
         Professor</a>
+    </div>
   </div>
-  <div class="timetable-img text-center">
-    <img src="img/content/timetable.png" alt="">
-  </div>
-
-
-  <div class="table-responsive">
+  <div class="table-responsive" *ngIf="timeTable">
     <table class="table table-bordered text-center">
       <thead>
         <tr class="bg-light-gray">
@@ -29,10 +27,12 @@
           <td class="col1" *ngFor="let time of timings;let j = index">
             <span
               class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13"
-              (click)="addLecture(i,j)" *ngIf="timeTable[i][j] == 0">+</span>
+              (click)="addLecture(i,j)" *ngIf="timeTable[i][j] == 0 && role != 'student'">+</span>
 
-            <div class="margin-10px-top font-size14 bold" *ngIf="timeTable[i][j] != 0" >Class : {{timeTable[i][j].class}}</div>
-            <div class="margin-10px-top font-size14 bold" *ngIf="timeTable[i][j] != 0" >Professor : {{timeTable[i][j].professor}}</div>
+            <div class="margin-10px-top font-size14 bold" *ngIf="timeTable[i][j] != 0">Class : {{timeTable[i][j].class}}
+            </div>
+            <div class="margin-10px-top font-size14 bold" *ngIf="timeTable[i][j] != 0">Professor :
+              {{timeTable[i][j].professor}}</div>
             <div class="margin-10px-top font-size14 " *ngIf="timeTable[i][j] != 0">Time: {{time}}</div>
           </td>
         </tr>
