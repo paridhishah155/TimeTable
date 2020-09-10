@@ -6,11 +6,11 @@
         Professor</a>
       <a *ngIf="role != 'student'" href="javascript:;" routerLink="/StudentTimeTable"
         class="btn btn-primary btn-md ml-2 mb-5" role="button">Student View</a>
-       <!--  <a *ngIf="role != 'student'" href="javascript:;" (click)= "ResetTable()"
-        class="btn btn-success btn-md ml-5 mb-5" role="button">Reset Table</a> -->
+        <a *ngIf="role != 'student'" href="javascript:;" (click)= "ResetTable()"
+        class="btn btn-success btn-md ml-5 mb-5" role="button">Reset Table</a> 
     </div>
   </div>
-  <div class="table-responsive" *ngIf="timeTable.length > 0">
+  <div class="table-responsive" *ngIf="timeTable.length > 0 && !loading">
     <table class="table table-bordered text-center">
       <thead>
         <tr class="bg-light-gray">
@@ -43,6 +43,15 @@
       </tbody>
     </table>
   </div>
+ 
+</div>
+<div class="my-container">
+  <ng-template #customLoadingTemplate>
+      <div class="custom-class">
+      </div>
+  </ng-template>
+
+  <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate"></ngx-loading>
 </div>
 <div class="modal fade" bsModal #addProfessor="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog"
   aria-labelledby="dialog-static-name">

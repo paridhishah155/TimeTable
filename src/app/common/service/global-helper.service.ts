@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ProfessorService } from './professor.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -12,25 +13,18 @@ export class GlobalHelperService {
   tempTimeTable = [];
   reset: any;
 
-  constructor(private professorService: ProfessorService) {
-    // this.fill2DimensionsArray(6, 5);
+  constructor(private professorService: ProfessorService, private toastr: ToastrService) {
     this.professorService.get('timeTable/getTimeTable').then((data: any) => {
       this.timeTable$.next(JSON.parse(data.timeTable));
     }).catch(err => { });
-    
     this.professorService.get('professor/getProfessor').then((data: any) => {
       this.professor$.next(data.Name);
     }).catch(err => { });
   }
-
-  fill2DimensionsArray(rows, columns) {
-    for (let i = 0; i < rows; i++) {
-      this.tempTimeTable.push([0]);
-      for (let j = 0; j < columns; j++) {
-        this.tempTimeTable[i][j] = 0;
-      }
-    }
-    return this.tempTimeTable;
+  showSuccess(title, msg) {
+    this.toastr.success(title, msg);
   }
-  
+  showDanger(title, msg) {
+    this.toastr.error(title, msg);
+  }
 }

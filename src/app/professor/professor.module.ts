@@ -5,8 +5,9 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClient, HttpHandler, HttpClientModule } from '@angular/common/http';
-
-
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxLoadingModule } from 'ngx-loading';
 
 @NgModule({
 
@@ -14,7 +15,10 @@ import { HttpClient, HttpHandler, HttpClientModule } from '@angular/common/http'
     CommonModule,
     ModalModule.forRoot(),
     FormsModule,
-    RouterModule
+    RouterModule,
+    ToastrModule.forRoot(),
+    BrowserAnimationsModule,
+    NgxLoadingModule.forRoot({})
   ],
   exports: [ViewTimeTableComponent],
   declarations: [ViewTimeTableComponent]
