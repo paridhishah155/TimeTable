@@ -4,7 +4,7 @@ import { CreateLectureComponent } from './create-lecture/create-lecture.componen
 import { ViewTimeTableComponent } from './view-time-table/view-time-table.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule } from '@angular/forms';
-
+import { HttpClient, HttpHandler, HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -12,7 +12,9 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     ModalModule.forRoot(),
-    FormsModule
-  ]
+    FormsModule,
+    HttpClientModule
+  ],
+  providers: [HttpClient],
 })
 export class ProfessorModule { }

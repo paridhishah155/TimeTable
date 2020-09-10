@@ -3,8 +3,6 @@
     <div class="col-12">
       <a href="javascript:;" class="btn btn-primary btn-md" (click)="addProfessor.show()" role="button">Add
         Professor</a>
-      <a class="btn btn-primary btn-md ml-2" routerLink="/ViewProfessorTimeTable" role="button">Add Lecture</a>
-    </div>
   </div>
   <div class="timetable-img text-center">
     <img src="img/content/timetable.png" alt="">
@@ -33,8 +31,9 @@
               class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13"
               (click)="addLecture(i,j)" *ngIf="timeTable[i][j] == 0">+</span>
 
-            <div class="margin-10px-top font-size14" *ngIf="timeTable[i][j] != 0">{{timeTable[i][j]}}</div>
-            <div class="margin-10px-top font-size14" *ngIf="timeTable[i][j] != 0">Time: {{time}}</div>
+            <div class="margin-10px-top font-size14 bold" *ngIf="timeTable[i][j] != 0" >Class : {{timeTable[i][j].class}}</div>
+            <div class="margin-10px-top font-size14 bold" *ngIf="timeTable[i][j] != 0" >Professor : {{timeTable[i][j].professor}}</div>
+            <div class="margin-10px-top font-size14 " *ngIf="timeTable[i][j] != 0">Time: {{time}}</div>
           </td>
         </tr>
 

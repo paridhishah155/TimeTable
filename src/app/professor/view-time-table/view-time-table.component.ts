@@ -1,3 +1,4 @@
+import { ProfessorService } from './../../common/service/professor.service';
 import { GlobalHelperService } from './../../common/service/global-helper.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -24,7 +25,7 @@ export class ViewTimeTableComponent implements OnInit {
   timeTable = [];
   professor = [];
 
-  constructor(private globalHelper: GlobalHelperService, private modalService: NgbModal) { }
+  constructor(private globalHelper: GlobalHelperService, private modalService: NgbModal, private professorService: ProfessorService) { }
 
   ngOnInit(): void {
     this.fill2DimensionsArray(this.lecture.length, this.timings.length);
@@ -64,10 +65,15 @@ export class ViewTimeTableComponent implements OnInit {
   }
 
   saveLecture() {
-    this.timeTable[this.selectedLecture[0]][this.selectedLecture[1]] = this.lectureName + ' : ' + this.selectedProfessorName;
+    var lecture = {
+      class: this.lectureName,
+      professor: this.selectedProfessorName
+    }
+    this.timeTable[this.selectedLecture[0]][this.selectedLecture[1]] = lecture;
+    console.log(this.timeTable);
     this.selectedProfessorName = '';
     this.lectureName = '';
+    this.professorService.insertTimetable(this.timeTable);
     this.addLectureModal.hide();
   }
-
 }

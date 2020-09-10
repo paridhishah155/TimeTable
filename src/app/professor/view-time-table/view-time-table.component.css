@@ -105,7 +105,8 @@ body {
 }
 
 .font-size14 {
-  font-size: 14px;
+  font-size:14px;
+  color: #4d4d4d;
 }
 
 .text-light-gray {
@@ -126,4 +127,7 @@ body {
   padding: .75rem;
   vertical-align: top;
   border-top: 1px solid #dee2e6;
+}
+.bold{
+  font-weight: bold;
 }
