@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
@@ -7,9 +9,10 @@ import { HttpClient } from '@angular/common/http';
 export class ProfessorService {
 
   constructor(private httpClient: HttpClient) { }
-  insertTimetable(data) {
+
+  put(data: any, url: string) {
     return new Promise((resolve, reject) => {
-      this.httpClient.post(`http://localhost:3000/user/saveTimetable` , data)
+      this.httpClient.put(environment.timetableURL + url, data)
         .subscribe(res => {
           resolve(res);
         }, (err) => {
@@ -17,9 +20,21 @@ export class ProfessorService {
         });
     });
   }
-  getimeTable(){
+
+  post(data: any, url: any) {
     return new Promise((resolve, reject) => {
-      this.httpClient.get(`http://localhost:3000/user/getTimetable`)
+      this.httpClient.post(environment.timetableURL + url, data)
+        .subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        });
+    });
+  }
+
+  get(url: string) {
+    return new Promise((resolve, reject) => {
+      this.httpClient.get(environment.timetableURL + url)
         .subscribe(res => {
           resolve(res);
         }, (err) => {

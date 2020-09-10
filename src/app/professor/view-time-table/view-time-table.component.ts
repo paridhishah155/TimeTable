@@ -5,6 +5,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule, Routes } from '@angular/router';
 import { ProfessorService } from 'src/app/common/service/professor.service';
 
+
 @Component({
   selector: 'app-view-time-table',
   templateUrl: './view-time-table.component.html',
@@ -26,6 +27,7 @@ export class ViewTimeTableComponent implements OnInit {
 
   timeTable = [];
   professor = [];
+  count = 0;
 
   constructor(private globalHelper: GlobalHelperService, private modalService: NgbModal, private professorService: ProfessorService) { }
 
@@ -34,6 +36,13 @@ export class ViewTimeTableComponent implements OnInit {
     this.globalHelper.timeTable$.subscribe(data => {
       if (data) {
         this.timeTable = data;
+        data.forEach(row => {
+          row.forEach(value => {
+            if (value != 0) {
+              this.count++;
+            }
+          });
+        });
       }
     });
     this.globalHelper.professor$.subscribe(data => {
@@ -51,8 +60,16 @@ export class ViewTimeTableComponent implements OnInit {
     } else {
       this.validateProfessor = false;
       this.professor.push(this.professorName);
-      this.globalHelper.professor$.next(this.professor);
+      let professor = {
+        Name: this.professorName
+      }
+      this.professorService.post(professor, 'professor/insertProfessor').then((data: any) => {
+        this.globalHelper.professor$.next(this.professor);
+      }).catch(err => { });
+
+
       this.professorName = '';
+
       this.addProfessor.hide();
     }
   }
@@ -61,13 +78,14 @@ export class ViewTimeTableComponent implements OnInit {
     this.selectedLecture = [];
     if (this.professor.length === 0) {
       alert('Please add professor');
-    } else {
+    }else if(this.count > 25){
+      alert('Do not add more than 25');
+    }else {
       this.addLectureModal.show();
     }
     this.selectedLecture[0] = row;
     this.selectedLecture[1] = column;
   }
-
   saveLecture() {
     const lecture = {
       class: this.lectureName,
@@ -77,8 +95,11 @@ export class ViewTimeTableComponent implements OnInit {
     this.globalHelper.timeTable$.next(this.timeTable);
     this.selectedProfessorName = '';
     this.lectureName = '';
-    this.professorService.insertTimetable(this.timeTable);
     this.addLectureModal.hide();
+    this.count++;
+    this.professorService.put({ "timeTable": JSON.stringify(this.timeTable) }, 'timeTable/saveTimeTable').then((data: any) => {
+      this.globalHelper.professor$.next(this.professor);
+    }).catch(err => { });;
   }
 
 }

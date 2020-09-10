@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  timetableURL: 'https://timetableservice.herokuapp.com/'
 };
