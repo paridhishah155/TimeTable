@@ -1,10 +1,11 @@
 <div class="container">
   <div class="row mt-5">
     <div class="col-12">
-      <a class="btn btn-success btn-md mr-2 mb-5" routerLink="/" role="button">Home</a>
       <a *ngIf="role != 'student'" href="javascript:;" class="btn btn-primary btn-md mb-5" (click)="addProfessor.show()"
         role="button">Add
         Professor</a>
+      <a *ngIf="role != 'student'" href="javascript:;" routerLink="/StudentTimeTable"
+        class="btn btn-primary btn-md ml-2 mb-5" role="button">Student View</a>
     </div>
   </div>
   <div class="table-responsive" *ngIf="timeTable">
