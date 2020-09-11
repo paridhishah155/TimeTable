@@ -38,7 +38,6 @@ export class ViewTimeTableComponent implements OnInit {
     // this.fill2DimensionsArray(this.lecture.length, this.timings.length);
     this.globalHelper.timeTable$.subscribe(data => {
       this.count = 0;
-      debugger;
       if (data) {
         this.timeTable = data;
         this.loading = false;
@@ -65,7 +64,6 @@ export class ViewTimeTableComponent implements OnInit {
             }
           });
         });
-        console.log(this.proArr);
       }
     });
   }
@@ -91,8 +89,6 @@ export class ViewTimeTableComponent implements OnInit {
   }
 
   addLecture(row, column) {
-
-    debugger;
     this.selectedLecture = [];
     if (this.professor.length === 0) {
       this.globalHelper.showDanger('Saved', 'Please add professor.....');
@@ -114,7 +110,6 @@ export class ViewTimeTableComponent implements OnInit {
       this.timeTable[this.selectedLecture[0]][this.selectedLecture[1]] = lecture;
       this.globalHelper.timeTable$.next(this.timeTable);
       this.addLectureModal.hide();
-      debugger;
       this.count++;
       this.professorService.put({ timeTable: JSON.stringify(this.timeTable) }, 'timeTable/saveTimeTable').then((data: any) => {
         this.globalHelper.professor$.next(this.professor);
@@ -142,6 +137,7 @@ export class ViewTimeTableComponent implements OnInit {
     const tempTimeTable = Array.from({ length: 6 }, () => (
       Array.from({ length: 5 }, () => 0)
     ));
+    this.proArr = [];
     this.professor.forEach(pro => {
       this.proArr.push({ name: pro, value: [0, 0, 0, 0, 0], totalCount: 0 })
     });
