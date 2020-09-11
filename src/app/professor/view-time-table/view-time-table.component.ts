@@ -5,6 +5,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule, Routes } from '@angular/router';
 import { ProfessorService } from 'src/app/common/service/professor.service';
 import { ToastrModule } from 'ngx-toastr';
+import { callbackify } from 'util';
 
 @Component({
   selector: 'app-view-time-table',
@@ -28,27 +29,43 @@ export class ViewTimeTableComponent implements OnInit {
   timeTable = [];
   professor = [];
   count = 0;
+  proArr = []
   loading = true;
+  classCount = 0;
   constructor(private globalHelper: GlobalHelperService, private modalService: NgbModal, private professorService: ProfessorService) { }
-
+  profobj = {};
   ngOnInit(): void {
     // this.fill2DimensionsArray(this.lecture.length, this.timings.length);
     this.globalHelper.timeTable$.subscribe(data => {
+      this.count = 0;
+      debugger;
       if (data) {
         this.timeTable = data;
         this.loading = false;
-        data.forEach(row => {
-          row.forEach(value => {
-            if (value !== 0) {
-              this.count++;
-            }
-          });
-        });
       }
     });
     this.globalHelper.professor$.subscribe(data => {
       if (data) {
+        this.proArr = [];
         this.professor = data;
+        this.professor.forEach(pro => {
+          this.proArr.push({ name: pro, value: [0, 0, 0, 0, 0], totalCount: 0 })
+        });
+        this.timeTable.forEach((row, p) => {
+          row.forEach((value, k) => {
+            if (value !== 0) {
+              this.count++;
+              for (let i = 0; i < this.proArr.length; i++) {
+                if (this.proArr[i].name === value.professor) {
+                  this.proArr[i].value[k] = this.proArr[i].value[k] + 1;
+                  this.proArr[i].totalCount++;
+                  break;
+                }
+              }
+            }
+          });
+        });
+        console.log(this.proArr);
       }
     });
   }
@@ -74,35 +91,60 @@ export class ViewTimeTableComponent implements OnInit {
   }
 
   addLecture(row, column) {
+
+    debugger;
     this.selectedLecture = [];
     if (this.professor.length === 0) {
       this.globalHelper.showDanger('Saved', 'Please add professor.....');
     } else if (this.count > 25) {
       this.globalHelper.showDanger('Saved', 'Do not add more than 25.....');
-    } else {
+    }
+    else {
       this.addLectureModal.show();
     }
     this.selectedLecture[0] = row;
     this.selectedLecture[1] = column;
   }
   saveLecture() {
-    const lecture = {
-      class: this.lectureName,
-      professor: this.selectedProfessorName
-    };
-    this.timeTable[this.selectedLecture[0]][this.selectedLecture[1]] = lecture;
-    this.globalHelper.timeTable$.next(this.timeTable);
-    this.addLectureModal.hide();
-    this.count++;
-    this.professorService.put({ timeTable: JSON.stringify(this.timeTable) }, 'timeTable/saveTimeTable').then((data: any) => {
-      this.globalHelper.professor$.next(this.professor);
-      this.globalHelper.showSuccess('Saved', 'Class saved successfully.....');
-    }).catch(err => { });
+    this.checkEligibility(() => {
+      const lecture = {
+        class: this.lectureName,
+        professor: this.selectedProfessorName
+      };
+      this.timeTable[this.selectedLecture[0]][this.selectedLecture[1]] = lecture;
+      this.globalHelper.timeTable$.next(this.timeTable);
+      this.addLectureModal.hide();
+      debugger;
+      this.count++;
+      this.professorService.put({ timeTable: JSON.stringify(this.timeTable) }, 'timeTable/saveTimeTable').then((data: any) => {
+        this.globalHelper.professor$.next(this.professor);
+        this.globalHelper.showSuccess('Saved', 'Class saved successfully.....');
+      }).catch(err => { });
+    });
+  }
+  checkEligibility(callback) {
+    for (let i = 0; i < this.proArr.length; i++) {
+      if (this.proArr[i].name === this.selectedProfessorName) {
+        if (this.proArr[i].value[this.selectedLecture[1]] >= 4) {
+          this.globalHelper.showDanger('Professor', 'Have Added professor more than 4 times in the same Day');
+          break;
+        } else if (this.proArr[i].totalCount >= 18) {
+          this.globalHelper.showDanger('Professor', 'Have Added professor more than 18 times in the same Week');
+          break;
+        } else {
+          callback();
+          break;      
+        }
+      }
+    }
   }
   ResetTable() {
     const tempTimeTable = Array.from({ length: 6 }, () => (
       Array.from({ length: 5 }, () => 0)
-   ));
+    ));
+    this.professor.forEach(pro => {
+      this.proArr.push({ name: pro, value: [0, 0, 0, 0, 0], totalCount: 0 })
+    });
     this.globalHelper.timeTable$.next(tempTimeTable);
     this.professorService.put({ timeTable: JSON.stringify(tempTimeTable) }, 'timeTable/saveTimeTable').then((data: any) => {
 
