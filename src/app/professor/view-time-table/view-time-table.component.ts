@@ -29,7 +29,7 @@ export class ViewTimeTableComponent implements OnInit {
   timeTable = [];
   professor = [];
   count = 0;
-  proArr = []
+  proArr = [];
   loading = true;
   classCount = 0;
   constructor(private globalHelper: GlobalHelperService, private modalService: NgbModal, private professorService: ProfessorService) { }
@@ -48,7 +48,7 @@ export class ViewTimeTableComponent implements OnInit {
         this.proArr = [];
         this.professor = data;
         this.professor.forEach(pro => {
-          this.proArr.push({ name: pro, value: [0, 0, 0, 0, 0], totalCount: 0 })
+          this.proArr.push({ name: pro, value: [0, 0, 0, 0, 0], totalCount: 0 });
         });
         this.timeTable.forEach((row, p) => {
           row.forEach((value, k) => {
@@ -128,7 +128,7 @@ export class ViewTimeTableComponent implements OnInit {
           break;
         } else {
           callback();
-          break;      
+          break;
         }
       }
     }
@@ -139,7 +139,7 @@ export class ViewTimeTableComponent implements OnInit {
     ));
     this.proArr = [];
     this.professor.forEach(pro => {
-      this.proArr.push({ name: pro, value: [0, 0, 0, 0, 0], totalCount: 0 })
+      this.proArr.push({ name: pro, value: [0, 0, 0, 0, 0], totalCount: 0 });
     });
     this.globalHelper.timeTable$.next(tempTimeTable);
     this.professorService.put({ timeTable: JSON.stringify(tempTimeTable) }, 'timeTable/saveTimeTable').then((data: any) => {
